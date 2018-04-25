@@ -10,6 +10,16 @@ be really helpful. Written in Go, si single binary tool can generate custom inve
 starting from a simple yaml file with a minimun set of parameters.
 Default values are provided to generate a basic inventory from scratch.
 
+## Build and Install
+
+To build and install os-inventory:
+
+```
+$ make
+$ sudo make install
+```
+
+This will compile the binary install it under **/usr/local/bin** on your system.
 
 ## Usage
 
