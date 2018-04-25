@@ -9,3 +9,6 @@ build:
 clean:
 	$(GOCLEAN)
 	rm -f $(BINFILE)
+
+install:
+	mv $(BINFILE) /usr/local/bin
