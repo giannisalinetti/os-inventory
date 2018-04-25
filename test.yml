@@ -1,0 +1,23 @@
+---
+deployment_type: "enterprise"
+multi_master: true
+haproxy_enabled: true
+masters_list:
+    - m1.example.com
+    - m2.example.com
+    - m3.example.com
+etcd_list:
+    - m1.example.com
+    - m2.example.com
+    - m3.example.com
+lb_list:
+    - lb.example.com
+nodes_map:
+    m1.example.com: ""
+    m2.example.com: ""
+    m3.example.com: ""
+    n1.example.com: "openshift_node_labes=\"{'region': 'infra'}\""
+    n2.example.com: "openshift_node_labes=\"{'region': 'infra'}\""
+    n3.example.com: "openshift_node_labes=\"{'region': 'infra'}\""
+    n4.example.com: "openshift_node_labes=\"{'region': 'primary'}\""
+    n5.example.com: "openshift_node_labes=\"{'region': 'primary'}\""
