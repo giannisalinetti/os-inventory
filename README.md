@@ -1,4 +1,4 @@
-# os-inventory: An OpenShift installation inventory generator
+# os-inventory: an OpenShift installation inventory generator
 
 ## Why?
 
@@ -9,6 +9,7 @@ To speed up the deployment process, a tool that creates inventories from a templ
 be really helpful. Written in Go, si single binary tool can generate custom inventories
 starting from a simple yaml file with a minimun set of parameters.
 Default values are provided to generate a basic inventory from scratch.
+A basic sanity check on data, especially strings, is done to avoid errors on install time.
 
 ## Build and Install
 
@@ -95,7 +96,7 @@ deployment_type: "origin"
 
 - Create new entries in the template for Container Native Storage (CNS)
 - Implement spf13/viper to manage configuration (also by custom flags)
-- Create quality checks on string and int values
+- Create more sanity checks on string and int values
 - Implement a good code testing
 
 
