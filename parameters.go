@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"net"
 )
 
 // Inventory is the basic definition of all parameters
@@ -75,6 +76,10 @@ func (i *Inventory) CheckClusterMethod() error {
 
 // Check if string is a valid IPv4 address
 func (i *Inventory) CheckInfraIpv4() error {
+	ip := net.ParseIP(i.GeneratorInfraIpv4)
+	if ip == nil {
+		return errors.New("Invalid IPv4 address.")
+	}
 	return nil
 }
 

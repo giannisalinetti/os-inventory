@@ -131,14 +131,14 @@ func main() {
 	t := template.New("OpenShiftInventory")
 	t, err := t.Parse(tmpl)
 	if err != nil {
-		log.Fatal("Parse:", err)
+		log.Fatal("Parse: ", err)
 		return
 	}
 
 	// Run sanity checks before exporting
 	err = doSanityChecks(inventory)
 	if err != nil {
-		log.Fatal("Sanity check:", err)
+		log.Fatal("Sanity check: ", err)
 		return
 	}
 
@@ -146,20 +146,20 @@ func main() {
 	if *dumpFile != "" {
 		f, err := os.Create(*dumpFile)
 		if err != nil {
-			log.Fatal("Create file:", err)
+			log.Fatal("Create file: ", err)
 			return
 		}
 		// Print inventory to file
 		err = t.Execute(f, inventory)
 		if err != nil {
-			log.Fatal("Execute:", err)
+			log.Fatal("Execute: ", err)
 			return
 		}
 	} else {
 		// Print inventory to stdout
 		err = t.Execute(os.Stdout, inventory)
 		if err != nil {
-			log.Fatal("Execute:", err)
+			log.Fatal("Execute: ", err)
 			return
 		}
 	}
