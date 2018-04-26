@@ -15,7 +15,7 @@ type Inventory struct {
 	GeneratorInstallVersion        string            `yaml:"install_version"`
 	GeneratorSkipChecks            bool              `yaml:"skip_checks"`
 	GeneratorMultiMaster           bool              `yaml:"multi_master"`
-	GeneratorClusterMethod         string            `yaml:"cluste_rmethod"`
+	GeneratorClusterMethod         string            `yaml:"cluster_method"`
 	GeneratorClusterHostname       string            `yaml:"cluster_hostname"`
 	GeneratorClusterPublicHostname string            `yaml:"cluster_public_hostname"`
 	GeneratorContainerizedDeploy   bool              `yaml:"containerized_deploy"`
