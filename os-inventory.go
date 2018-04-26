@@ -56,7 +56,7 @@ func New(defaultValues map[string]interface{}) *Inventory {
 }
 
 // ParseYAML parses a YAML input file for custom paramters values
-func ParseYAML(yamlFile string, inv *Inventory) error {
+func parseYAML(yamlFile string, inv *Inventory) error {
 	data, err := ioutil.ReadFile(yamlFile)
 	if err != nil {
 		return err
@@ -65,6 +65,10 @@ func ParseYAML(yamlFile string, inv *Inventory) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func doSanityCheck(inv *Inventory) error {
 	return nil
 }
 
@@ -93,7 +97,7 @@ func main() {
 	if *loadYAML != "" {
 		filePath := *loadYAML
 		fmt.Printf("Yaml loaded\n")
-		err := ParseYAML(filePath, inventory)
+		err := parseYAML(filePath, inventory)
 		if err != nil {
 			log.Fatal("Error opening YAML: %v", err)
 			return
