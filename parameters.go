@@ -1,5 +1,9 @@
 package main
 
+import (
+	"errors"
+)
+
 // Inventory is the basic definition of all parameters
 type Inventory struct {
 	GeneratorDeploymentType        string            `yaml:"deployment_type"`
@@ -39,4 +43,34 @@ type Inventory struct {
 	GeneratorEtcdList              []string          `yaml:"etcd_list"`
 	GeneratorLbList                []string          `yaml:"lb_list"`
 	GeneratorNodesMap              map[string]string `yaml:"nodes_map"`
+}
+
+func (i *Inventory) CheckDeploymentType() error {
+	if i.GeneratorDeploymentType == "origin" || i.GeneratorDeploymentType == "enterprise" {
+		return nil
+	} else {
+		return errors.New("Invalid deployemnt type.")
+	}
+}
+
+func (i *Inventory) CheckInstallVersion() error {
+	versions := []string{"v3.4", "v3.5", "v3.6", "v3.7", "v3.9", "v3.10", "v3.11"}
+	for _, v := range versions {
+		if i.GeneratorInstallVersion == v {
+			return nil
+		}
+	}
+	return errors.New("Invalid or unsupported install version.")
+}
+
+func (i *Inventory) CheckClusterMethod() error {
+	return nil
+}
+
+func (i *Inventory) CheckInfraIpv4() error {
+	return nil
+}
+
+func (i *Inventory) CheckSdnPlugin() error {
+	return nil
 }
