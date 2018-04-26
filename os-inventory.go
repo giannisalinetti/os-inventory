@@ -68,7 +68,30 @@ func parseYAML(yamlFile string, inv *Inventory) error {
 	return nil
 }
 
-func doSanityCheck(inv *Inventory) error {
+// doSanityChecks verifies passed parameters
+func doSanityChecks(inv *Inventory) error {
+
+	err := inv.CheckDeploymentType()
+	if err != nil {
+		return err
+	}
+	err = inv.CheckInstallVersion()
+	if err != nil {
+		return err
+	}
+	err = inv.CheckClusterMethod()
+	if err != nil {
+		return err
+	}
+	err = inv.CheckInfraIpv4()
+	if err != nil {
+		return err
+	}
+	err = inv.CheckSdnPlugin()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -109,6 +132,13 @@ func main() {
 	t, err := t.Parse(tmpl)
 	if err != nil {
 		log.Fatal("Parse:", err)
+		return
+	}
+
+	// Run sanity checks before exporting
+	err = doSanityChecks(inventory)
+	if err != nil {
+		log.Fatal("Sanity check:", err)
 		return
 	}
 
