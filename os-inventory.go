@@ -11,47 +11,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Inventory is the basic definition of all parameters
-type Inventory struct {
-	GeneratorDeploymentType        string            `yaml:"deployment_type"`
-	GeneratorSshUser               string            `yaml:"ssh_user"`
-	GeneratorNfsEnabled            bool              `yaml:"nfs_enabled"`
-	GeneratorRegistryNativeNfs     bool              `yaml:"registry_native_nfs"`
-	GeneratorHaproxyEnabled        bool              `yaml:"haproxy_enabled"`
-	GeneratorInstallVersion        string            `yaml:"install_version"`
-	GeneratorSkipChecks            bool              `yaml:"skip_checks"`
-	GeneratorMultiMaster           bool              `yaml:"multi_master"`
-	GeneratorClusterMethod         string            `yaml:"cluste_rmethod"`
-	GeneratorClusterHostname       string            `yaml:"cluster_hostname"`
-	GeneratorClusterPublicHostname string            `yaml:"cluster_public_hostname"`
-	GeneratorContainerizedDeploy   bool              `yaml:"containerized_deploy"`
-	GeneratorContainerizedOvs      bool              `yaml:"containerized_ovs"`
-	GeneratorContainerizedNode     bool              `yaml:"containerized_node"`
-	GeneratorContainerizedMaster   bool              `yaml:"containerized_master"`
-	GeneratorContainerizedEtcd     bool              `yaml:"containerized_etcd"`
-	GeneratorSystemImagesRegistry  string            `yaml:"system_images_registry"`
-	GeneratorOpenshiftUseCrio      bool              `yaml:"openshift_use_crio"`
-	GeneratorOpenshiftCrioUseRpm   bool              `yaml:"openshift_crio_use_rpm"`
-	GeneratorMultiInfra            bool              `yaml:"multi_infra"`
-	GeneratorUseXip                bool              `yaml:"use_xip"`
-	GeneratorInfraIpv4             string            `yaml:"infra_ipv4"`
-	GeneratorExtDnsWildcard        string            `yaml:"ext_dns_wildcard"`
-	GeneratorSdnPlugin             string            `yaml:"sdn_plugin"`
-	GeneratorDisableServiceCatalog bool              `yaml:"disable_servicecatalog"`
-	GeneratorInfraReplicas         int               `yaml:"infra_replicas"`
-	GeneratorMetricsEnabled        bool              `yaml:"metrics_enabled"`
-	GeneratorDeployHosa            bool              `yaml:"deploy_hosa"`
-	GeneratorMetricsNativeNfs      bool              `yaml:"metrics_native_nfs"`
-	GeneratorPrometheusEnabled     bool              `yaml:"prometheus_enabled"`
-	GeneratorPrometheusNativeNfs   bool              `yaml:"prometheus_native_nfs"`
-	GeneratorLoggingEnabled        bool              `yaml:"logging_enabled"`
-	GeneratorLoggingNativeNfs      bool              `yaml:"logging_native_nfs"`
-	GeneratorMastersList           []string          `yaml:"masters_list"`
-	GeneratorEtcdList              []string          `yaml:"etcd_list"`
-	GeneratorLbList                []string          `yaml:"lb_list"`
-	GeneratorNodesMap              map[string]string `yaml:"nodes_map"`
-}
-
 // New loads default values and returns *Inventory
 func New(defaultValues map[string]interface{}) *Inventory {
 	inv := &Inventory{
@@ -111,14 +70,16 @@ func ParseYAML(yamlFile string, inv *Inventory) error {
 
 func main() {
 
-	showDefaults := flag.Bool("show-defaults", false, "Dump defaults to desired format.")
-	loadYAML := flag.String("load-yaml", "", "Load configuration from YAML file.")
+	showDefaults := flag.BoolP("show-defaults", "d", false, "Dump defaults parameters to stdout.")
+	loadYAML := flag.StringP("load-yaml", "f", "", "Load configuration from YAML file.")
+	dumpFile := flag.StringP("output", "o", "", "Printe generated inventory to file.")
 
 	flag.Parse()
 
 	// Load default values
 	inventory := New(defaults)
 
+	// Print defaults to stdout in YAML format
 	if *showDefaults {
 		d, err := yaml.Marshal(&inventory)
 		if err != nil {
@@ -128,6 +89,7 @@ func main() {
 		return
 	}
 
+	// Load YAML configuration if passed
 	if *loadYAML != "" {
 		filePath := *loadYAML
 		fmt.Printf("Yaml loaded\n")
@@ -138,6 +100,7 @@ func main() {
 		}
 	}
 
+	// Create new template and parse content
 	t := template.New("OpenShiftInventory")
 	t, err := t.Parse(tmpl)
 	if err != nil {
@@ -145,9 +108,25 @@ func main() {
 		return
 	}
 
-	err = t.Execute(os.Stdout, inventory)
-	if err != nil {
-		log.Fatal("Execute:", err)
-		return
+	// Generate the processed inventory
+	if *dumpFile != "" {
+		f, err := os.Create(*dumpFile)
+		if err != nil {
+			log.Fatal("Create file:", err)
+			return
+		}
+		// Print inventory to file
+		err = t.Execute(f, inventory)
+		if err != nil {
+			log.Fatal("Execute:", err)
+			return
+		}
+	} else {
+		// Print inventory to stdout
+		err = t.Execute(os.Stdout, inventory)
+		if err != nil {
+			log.Fatal("Execute:", err)
+			return
+		}
 	}
 }

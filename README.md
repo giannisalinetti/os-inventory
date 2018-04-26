@@ -19,7 +19,7 @@ $ make
 $ sudo make install
 ```
 
-This will compile the binary install it under **/usr/local/bin** on your system.
+This will compile the binary install it under */usr/local/bin* on your system.
 
 ## Usage
 
@@ -44,14 +44,14 @@ $ os-inventory --show-defaults
 To load configurations from a YAML file:
 
 ```
-$ os-inventory --load-yaml test.yml
+$ os-inventory --load-yaml example.yml
 ```
 
-The generated inventory is always redirected to stdout, thus, to create a custom file,
-just redirect the output:
+The generated inventory is redirected by defayult to stdout. To create a custom file
+use the options *-o* or *--output*:
 
 ```
-$ os-inventory --load-yaml test.yml > /tmp/myinventory
+$ os-inventory --load-yaml example.yml --output /tmp/myinventory
 ```
 
 ## The YAML config
@@ -96,5 +96,6 @@ deployment_type: "origin"
 - Create new entries in the template for Container Native Storage (CNS)
 - Implement spf13/viper to manage configuration (also by custom flags)
 - Create quality checks on string and int values
+- Implement a good code testing
 
 
