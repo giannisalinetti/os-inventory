@@ -128,8 +128,7 @@ func main() {
 	}
 
 	// Create new template and parse content
-	t := template.New("OpenShiftInventory")
-	t, err := t.Parse(tmpl)
+	t, err := template.New("OpenShiftInventory").Parse(tmpl)
 	if err != nil {
 		log.Fatal("Parse: ", err)
 		return

@@ -1,0 +1,19 @@
+---
+deployment_type: origin
+install_version: v3.7
+skip_checks: true
+ext_dns_wildcard: osapps.example.com
+sdn_plugin: ovs-multitenant
+nfra_replicas: 1
+metrics_enabled: false
+deploy_hosa: false
+prometheus_enabled: false
+logging_enabled: false
+masters_list:
+    - m1.example.com
+etcd_list:
+    - m1.example.com
+nodes_map:
+    m1.example.com: ""
+    n1.example.com: "openshift_node_labes=\"{'region': 'infra'}\""
+    n2.example.com: "openshift_node_labes=\"{'region': 'primary'}\""
