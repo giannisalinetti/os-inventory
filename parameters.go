@@ -45,6 +45,7 @@ type Inventory struct {
 	GeneratorNodesMap              map[string]string `yaml:"nodes_map"`
 }
 
+// Check if deployment type is enterprise or origin
 func (i *Inventory) CheckDeploymentType() error {
 	if i.GeneratorDeploymentType == "origin" || i.GeneratorDeploymentType == "enterprise" {
 		return nil
@@ -53,6 +54,7 @@ func (i *Inventory) CheckDeploymentType() error {
 	}
 }
 
+// Check if installation version is valid
 func (i *Inventory) CheckInstallVersion() error {
 	versions := []string{"v3.4", "v3.5", "v3.6", "v3.7", "v3.9", "v3.10", "v3.11"}
 	for _, v := range versions {
@@ -60,17 +62,29 @@ func (i *Inventory) CheckInstallVersion() error {
 			return nil
 		}
 	}
-	return errors.New("Invalid or unsupported install version.")
+	return errors.New("Invalid or unsupported version.")
 }
 
+// Check if cluster method is native
 func (i *Inventory) CheckClusterMethod() error {
+	if i.GeneratorClusterMethod != "native" {
+		return errors.New("Invalid cluster method.")
+	}
 	return nil
 }
 
+// Check if string is a valid IPv4 address
 func (i *Inventory) CheckInfraIpv4() error {
 	return nil
 }
 
+// Check if SND plugin is among the supported ones
 func (i *Inventory) CheckSdnPlugin() error {
-	return nil
+	plugins := []string{"ovs-subnet", "ovs-multitenant", "ovs-networkpolicy"}
+	for _, v := range plugins {
+		if i.GeneratorSdnPlugin == v {
+			return nil
+		}
+	}
+	return errors.New("Invalid SND plugin.")
 }
