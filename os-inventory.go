@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	flag "github.com/spf13/pflag"
 	"io/ioutil"
 	"log"
 	"os"
@@ -96,107 +95,126 @@ func doSanityChecks(inv *Inventory) error {
 	return nil
 }
 
+const appDescription = `OpenShift installation inventory generation tool.
+	 The OpenShift adavanced installation method uses Ansible to provide a
+	 flexible and reliable way to deploy OpenShift on enterprise grade clusters.
+	 The whole deployments relies on a rich Ansible inventory where all nodes
+	 are defined, along with a huge set of inventory variables.
+	 Sometimes creating a basic inventory ready to be customized can be a long
+	 process.
+	 The purpose of os-inventory is to ease the inventory creation process, yet
+	 leaving to the user the freedom to apply further customizations.`
+
 func main() {
 
-	//showDefaults := flag.BoolP("show-defaults", "d", false, "Dump defaults parameters to stdout.")
-	//loadYAML := flag.StringP("load-yaml", "f", "", "Load configuration from YAML file.")
-	//dumpFile := flag.StringP("output", "o", "", "Printe generated inventory to file.")
-
-	var showDefaults bool
 	var loadYAML string
-	var dumpFile string
+	var inventoryFile string
+	var defaultsFile string
 
-	app := cli.NewApp()
-
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:        "file, f",
-			Usage:       "Load a YAML configuration file",
-			Destination: &loadYAML,
-		},
-		cli.StringFlag{
-			Name:        "output, o",
-			Usage:       "Print generated inventory to file",
-			Destination: &dumpFile,
-		},
-	}
-
-	app.Commands = []cli.Command{
-		{
-			Name:    "generate",
-			Aliases: []string{"gen", "g"},
-			Action: func(c *cli.Context) err {
-				return nil
-			},
-		},
-		{
-			Name:    "defaults",
-			Aliases: []string{"def", "d"},
-			Action: func(c *cli.Context) err {
-				return nil
-			},
-		},
-	}
-
-	//flag.Parse()
-
-	// Load default values
 	inventory := New(defaults)
 
-	// Print defaults to stdout in YAML format
-	if *showDefaults {
-		d, err := yaml.Marshal(&inventory)
-		if err != nil {
-			log.Fatal("error: %v", err)
-		}
-		fmt.Printf("---\n%s", d)
-		return
+	app := cli.NewApp()
+	app.Name = "os-inventory"
+	app.Authors = []cli.Author{
+		cli.Author{
+			Name:  "Giovan Battista Salinetti",
+			Email: "gbsalinetti@gmail.com",
+		},
+	}
+	app.Usage = "OpenShift installation inventory generation tool"
+	app.Description = appDescription
+	app.Version = "0.1.3"
+	app.Commands = []cli.Command{
+		{
+			Name:        "generate",
+			Aliases:     []string{"gen", "g"},
+			Usage:       "Generates the inventory file for OpenShift installations",
+			Description: "Generates the inventory file for OpenShift installations",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:        "file, f",
+					Usage:       "Load a YAML configuration file",
+					Destination: &loadYAML,
+				},
+				cli.StringFlag{
+					Name:        "output, o",
+					Usage:       "Print generated inventory to file",
+					Destination: &inventoryFile,
+				},
+			},
+			Action: func(c *cli.Context) error {
+				// Load YAML configuration if passed
+				if loadYAML != "" {
+					filePath := loadYAML
+					err := parseYAML(filePath, inventory)
+					if err != nil {
+						return err
+					}
+				}
+				// Create new template and parse content
+				t, err := template.New("OpenShiftInventory").Parse(tmpl)
+				if err != nil {
+					return err
+				}
+				// Run sanity checks before exporting
+				err = doSanityChecks(inventory)
+				if err != nil {
+					return err
+				}
+				// Generate the processed inventory
+				if inventoryFile != "" {
+					f, err := os.Create(inventoryFile)
+					if err != nil {
+						return err
+					}
+					// Print inventory to file
+					err = t.Execute(f, inventory)
+					if err != nil {
+						return err
+					}
+				} else {
+					// Print inventory to stdout
+					err = t.Execute(os.Stdout, inventory)
+					if err != nil {
+						return err
+					}
+				}
+				return nil
+			},
+		},
+		{
+			Name:        "defaults",
+			Aliases:     []string{"def", "d"},
+			Usage:       "Prints default configuration in YAML format",
+			Description: "Prints default configuration in YAML format",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:        "output, o",
+					Usage:       "Print defaults to file",
+					Destination: &defaultsFile,
+				},
+			},
+			Action: func(c *cli.Context) error {
+				d, err := yaml.Marshal(&inventory)
+				if err != nil {
+					return err
+				}
+				if defaultsFile != "" {
+					f, err := os.Create(defaultsFile)
+					if err != nil {
+						return err
+					}
+					fmt.Fprintf(f, "---\n%s", d)
+				} else {
+					fmt.Printf("---\n%s", d)
+				}
+				return nil
+			},
+		},
 	}
 
-	// Load YAML configuration if passed
-	if *loadYAML != "" {
-		filePath := *loadYAML
-		fmt.Printf("Yaml loaded\n")
-		err := parseYAML(filePath, inventory)
-		if err != nil {
-			log.Fatal("Error opening YAML: %v", err)
-			return
-		}
-	}
-
-	// Create new template and parse content
-	t, err := template.New("OpenShiftInventory").Parse(tmpl)
+	err := app.Run(os.Args)
 	if err != nil {
-		log.Fatal("Parse: ", err)
-		return
-	}
-
-	// Run sanity checks before exporting
-	err = doSanityChecks(inventory)
-	if err != nil {
-		log.Fatal("Sanity check: ", err)
-		return
-	}
-
-	// Generate the processed inventory
-	if *dumpFile != "" {
-		f, err := os.Create(*dumpFile)
-		if err != nil {
-			log.Fatal("Create file: ", err)
-			return
-		}
-		// Print inventory to file
-		err = t.Execute(f, inventory)
-		if err != nil {
-			log.Fatal("Execute: ", err)
-			return
-		}
-	} else {
-		// Print inventory to stdout
-		err = t.Execute(os.Stdout, inventory)
-		if err != nil {
-			log.Fatal("Execute: ", err)
-			return
-		}
+		log.Fatal(err)
 	}
 }
