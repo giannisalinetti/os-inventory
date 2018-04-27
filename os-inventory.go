@@ -8,6 +8,7 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 )
 
@@ -97,11 +98,47 @@ func doSanityChecks(inv *Inventory) error {
 
 func main() {
 
-	showDefaults := flag.BoolP("show-defaults", "d", false, "Dump defaults parameters to stdout.")
-	loadYAML := flag.StringP("load-yaml", "f", "", "Load configuration from YAML file.")
-	dumpFile := flag.StringP("output", "o", "", "Printe generated inventory to file.")
+	//showDefaults := flag.BoolP("show-defaults", "d", false, "Dump defaults parameters to stdout.")
+	//loadYAML := flag.StringP("load-yaml", "f", "", "Load configuration from YAML file.")
+	//dumpFile := flag.StringP("output", "o", "", "Printe generated inventory to file.")
 
-	flag.Parse()
+	var showDefaults bool
+	var loadYAML string
+	var dumpFile string
+
+	app := cli.NewApp()
+
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:        "file, f",
+			Usage:       "Load a YAML configuration file",
+			Destination: &loadYAML,
+		},
+		cli.StringFlag{
+			Name:        "output, o",
+			Usage:       "Print generated inventory to file",
+			Destination: &dumpFile,
+		},
+	}
+
+	app.Commands = []cli.Command{
+		{
+			Name:    "generate",
+			Aliases: []string{"gen", "g"},
+			Action: func(c *cli.Context) err {
+				return nil
+			},
+		},
+		{
+			Name:    "defaults",
+			Aliases: []string{"def", "d"},
+			Action: func(c *cli.Context) err {
+				return nil
+			},
+		},
+	}
+
+	//flag.Parse()
 
 	// Load default values
 	inventory := New(defaults)
