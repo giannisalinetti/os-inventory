@@ -9,6 +9,8 @@ To speed up the deployment process, a tool that creates inventories from a templ
 be really helpful. Written in Go, si single binary tool can generate custom inventories
 starting from a simple yaml file with a minimun set of parameters.
 Default values are provided to generate a basic inventory from scratch.
+Despite being a very simple tool, os-inventory implements a full working CLI that can be
+extended with new features in the future, yet maintaining the KISS phylosophy.
 A basic sanity check on data, especially strings, is done to avoid errors on install time.
 
 ## Build and Install
@@ -20,39 +22,45 @@ $ make
 $ sudo make install
 ```
 
-This will compile the binary install it under */usr/local/bin* on your system.
+This will run tests and compile the binary install it under */usr/local/bin* on your system.
 
 ## Usage
 
-To create a basic inventory simply run the command without flags:
+To get the generic help and overall description simply run the command without arguments:
 
 ```
 $ os-inventory
 ```
 
-To print an help:
+To print a specific command help:
 
 ```
-$ os-inventory --help
+$ os-inventory <COMMAND> --help
 ```
 
 To dump all the default values in YAML format to stdout:
 
 ```
-$ os-inventory --show-defaults
+$ os-inventory defaults
 ```
 
-To load configurations from a YAML file:
+To generate an inventory and dump it to stdout:
 
 ```
-$ os-inventory --load-yaml example.yml
+$ os-inventory generate
+```
+
+To generate the inventory loading configurations from a YAML file:
+
+```
+$ os-inventory generate -f examples/example.yml
 ```
 
 The generated inventory is redirected by defayult to stdout. To create a custom file
 use the options *-o* or *--output*:
 
 ```
-$ os-inventory --load-yaml example.yml --output /tmp/myinventory
+$ os-inventory generate -f example.yml -o /tmp/myinventory
 ```
 
 ## The YAML config
@@ -95,7 +103,6 @@ deployment_type: "origin"
 ## TODO
 
 - Create new entries in the template for Container Native Storage (CNS)
-- Implement spf13/viper to manage configuration (also by custom flags)
 - Create more sanity checks on string and int values
 - Implement a good code testing
 
