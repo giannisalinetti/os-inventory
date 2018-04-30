@@ -11,50 +11,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// New loads default values and returns *Inventory
-func New(defaultValues map[string]interface{}) *Inventory {
-	inv := &Inventory{
-		GeneratorDeploymentType:        defaultValues["generatorDeploymentType"].(string),
-		GeneratorSshUser:               defaultValues["generatorSshUser"].(string),
-		GeneratorNfsEnabled:            defaultValues["generatorNfsEnabled"].(bool),
-		GeneratorRegistryNativeNfs:     defaultValues["generatorRegistryNativeNfs"].(bool),
-		GeneratorHaproxyEnabled:        defaultValues["generatorHaproxyEnabled"].(bool),
-		GeneratorInstallVersion:        defaultValues["generatorInstallVersion"].(string),
-		GeneratorSkipChecks:            defaultValues["generatorSkipChecks"].(bool),
-		GeneratorMultiMaster:           defaultValues["generatorMultiMaster"].(bool),
-		GeneratorClusterMethod:         defaultValues["generatorClusterMethod"].(string),
-		GeneratorClusterHostname:       defaultValues["generatorClusterHostname"].(string),
-		GeneratorClusterPublicHostname: defaultValues["generatorClusterPublicHostname"].(string),
-		GeneratorContainerizedDeploy:   defaultValues["generatorContainerizedDeploy"].(bool),
-		GeneratorContainerizedOvs:      defaultValues["generatorContainerizedOvs"].(bool),
-		GeneratorContainerizedNode:     defaultValues["generatorContainerizedNode"].(bool),
-		GeneratorContainerizedMaster:   defaultValues["generatorContainerizedMaster"].(bool),
-		GeneratorContainerizedEtcd:     defaultValues["generatorContainerizedEtcd"].(bool),
-		GeneratorSystemImagesRegistry:  defaultValues["generatorSystemImagesRegistry"].(string),
-		GeneratorOpenshiftUseCrio:      defaultValues["generatorOpenshiftUseCrio"].(bool),
-		GeneratorOpenshiftCrioUseRpm:   defaultValues["generatorOpenshiftCrioUseRpm"].(bool),
-		GeneratorMultiInfra:            defaultValues["generatorMultiInfra"].(bool),
-		GeneratorUseXip:                defaultValues["generatorUseXip"].(bool),
-		GeneratorInfraIpv4:             defaultValues["generatorInfraIpv4"].(string),
-		GeneratorExtDnsWildcard:        defaultValues["generatorExtDnsWildcard"].(string),
-		GeneratorSdnPlugin:             defaultValues["generatorSdnPlugin"].(string),
-		GeneratorDisableServiceCatalog: defaultValues["generatorDisableServiceCatalog"].(bool),
-		GeneratorInfraReplicas:         defaultValues["generatorInfraReplicas"].(int),
-		GeneratorMetricsEnabled:        defaultValues["generatorMetricsEnabled"].(bool),
-		GeneratorDeployHosa:            defaultValues["generatorDeployHosa"].(bool),
-		GeneratorMetricsNativeNfs:      defaultValues["generatorMetricsNativeNfs"].(bool),
-		GeneratorPrometheusEnabled:     defaultValues["generatorPrometheusEnabled"].(bool),
-		GeneratorPrometheusNativeNfs:   defaultValues["generatorPrometheusNativeNfs"].(bool),
-		GeneratorLoggingEnabled:        defaultValues["generatorLoggingEnabled"].(bool),
-		GeneratorLoggingNativeNfs:      defaultValues["generatorLoggingNativeNfs"].(bool),
-		GeneratorMastersList:           defaultValues["generatorMastersList"].([]string),
-		GeneratorEtcdList:              defaultValues["generatorEtcdList"].([]string),
-		GeneratorLbList:                defaultValues["generatorLbList"].([]string),
-		GeneratorNodesMap:              defaultValues["generatorNodesMap"].(map[string]string),
-	}
-	return inv
-}
-
 // ParseYAML parses a YAML input file for custom paramters values
 func parseYAML(yamlFile string, inv *Inventory) error {
 	data, err := ioutil.ReadFile(yamlFile)
