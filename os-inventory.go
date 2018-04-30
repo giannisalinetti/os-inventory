@@ -7,12 +7,14 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/giannisalinetti/os-inventory/pkg/defaults"
+	"github.com/giannisalinetti/os-inventory/pkg/parameters"
 	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 )
 
 // ParseYAML parses a YAML input file for custom paramters values
-func parseYAML(yamlFile string, inv *Inventory) error {
+func parseYAML(yamlFile string, inv *parameters.Inventory) error {
 	data, err := ioutil.ReadFile(yamlFile)
 	if err != nil {
 		return err
@@ -25,7 +27,7 @@ func parseYAML(yamlFile string, inv *Inventory) error {
 }
 
 // doSanityChecks verifies passed parameters
-func doSanityChecks(inv *Inventory) error {
+func doSanityChecks(inv *parameters.Inventory) error {
 
 	err := inv.CheckDeploymentType()
 	if err != nil {
@@ -67,7 +69,7 @@ func main() {
 	var inventoryFile string
 	var defaultsFile string
 
-	inventory := New(defaults)
+	inventory := parameters.New(defaults.DefaultCfg)
 
 	app := cli.NewApp()
 	app.Name = "os-inventory"

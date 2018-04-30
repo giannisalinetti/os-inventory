@@ -1,9 +1,12 @@
-package main
+package parameters
 
-import "testing"
+import (
+	"github.com/giannisalinetti/os-inventory/pkg/defaults"
+	"testing"
+)
 
 func TestCheckDeploymentType(t *testing.T) {
-	i := New(defaults)
+	i := New(defaults.DefaultCfg)
 	badTests := []string{"dummy", "Origin", "enter prise", "origin", ""}
 	for _, testValue := range badTests {
 		i.GeneratorDeploymentType = testValue
@@ -15,7 +18,7 @@ func TestCheckDeploymentType(t *testing.T) {
 }
 
 func TestCheckInstallVersion(t *testing.T) {
-	i := New(defaults)
+	i := New(defaults.DefaultCfg)
 	validVersions := []string{"v3.4", "v3.5", "v3.6", "v3.7", "v3.9", "v3.10", "v3.11"}
 	badTests := []string{"v1.2", "3.9", "v3.0", "v3.6"}
 	for _, testValue := range badTests {
@@ -35,7 +38,7 @@ func TestCheckInstallVersion(t *testing.T) {
 }
 
 func TestCheckClusterMethod(t *testing.T) {
-	i := New(defaults)
+	i := New(defaults.DefaultCfg)
 	badTests := []string{"parallel", "NATIVE", "Native", "pcs"}
 	for _, testValue := range badTests {
 		i.GeneratorClusterMethod = testValue
@@ -47,7 +50,7 @@ func TestCheckClusterMethod(t *testing.T) {
 }
 
 func TestCheckInfraIpv4(t *testing.T) {
-	i := New(defaults)
+	i := New(defaults.DefaultCfg)
 	validAddr := []string{"192.168.1.20", "127.0.0.1", "172.25.250.10"}
 	badAddr := []string{"327.0.0.1", "302.200.1", "0.0,12", "a string"}
 	for _, testValue := range badAddr {
@@ -67,7 +70,7 @@ func TestCheckInfraIpv4(t *testing.T) {
 }
 
 func TestCheckSdnPlugin(t *testing.T) {
-	i := New(defaults)
+	i := New(defaults.DefaultCfg)
 	validPlugins := []string{"ovs-subnet", "ovs-multitenant", "ovs-networkpolicy"}
 	badTests := []string{"ovs-vxlan", "dummy", "Ovs-MultiTenant", "ovs_networkpolicy"}
 	for _, testValue := range badTests {
