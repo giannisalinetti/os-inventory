@@ -81,7 +81,7 @@ func main() {
 	}
 	app.Usage = "OpenShift installation inventory generation tool"
 	app.Description = appDescription
-	app.Version = "0.1.3"
+	app.Version = "0.1.4"
 	app.Commands = []cli.Command{
 		{
 			Name:        "generate",
