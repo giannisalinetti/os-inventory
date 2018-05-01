@@ -2,6 +2,10 @@
 deployment_type: "enterprise"
 multi_master: true
 haproxy_enabled: true
+nfs_enabled: false
+glusterfs_registry_enabled: true
+registry_cns: true
+registry_native_nfs: false
 masters_list:
     - m1.example.com
     - m2.example.com
@@ -12,8 +16,10 @@ etcd_list:
     - m3.example.com
 lb_list:
     - lb.example.com
-nfs_list:
-    - m1.example.com
+glusterfs_registry_map:
+    n1.example.com: "glusterfs_devices='[ \"/dev/vdb\", \"/dev/vdc\", \"/dev/vdd\" ]'"
+    n2.example.com: "glusterfs_devices='[ \"/dev/vdb\", \"/dev/vdc\", \"/dev/vdd\" ]'"
+    n3.example.com: "glusterfs_devices='[ \"/dev/vdb\", \"/dev/vdc\", \"/dev/vdd\" ]'"
 nodes_map:
     m1.example.com: ""
     m2.example.com: ""
@@ -23,3 +29,4 @@ nodes_map:
     n3.example.com: "openshift_node_labes=\"{'region': 'infra'}\""
     n4.example.com: "openshift_node_labes=\"{'region': 'primary'}\""
     n5.example.com: "openshift_node_labes=\"{'region': 'primary'}\""
+

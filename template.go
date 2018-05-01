@@ -6,9 +6,11 @@ masters
 etcd
 nodes
 {{ if .GeneratorNfsEnabled }}nfs{{"\n"}}{{ else }}{{ end -}}
-{{ if .GeneratorHaproxyEnabled }}lb{{"\n\n"}}{{ else }}{{"\n"}}{{ end -}}
+{{ if .GeneratorHaproxyEnabled }}lb{{"\n"}}{{ else }}{{"\n"}}{{ end -}}
+{{ if .GeneratorGlusterfsEnabled }}glusterfs{{"\n"}}{{ else }}{{ end -}}
+{{ if .GeneratorGlusterfsRegEnabled }}glusterfs_registry{{"\n"}}{{ else }}{{ end -}}
 
-[OSEv3:vars]
+{{"\n"}}[OSEv3:vars]
 ansible_ssh_user={{ .GeneratorSshUser }}
 deployment_type={{ .GeneratorDeploymentType }}
 openshift_release={{ .GeneratorInstallVersion -}}
@@ -94,6 +96,11 @@ openshift_hosted_registry_storage_nfs_directory=/exports
 openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
 openshift_hosted_registry_storage_volume_name=registry
 openshift_hosted_registry_storage_volume_size=20Gi
+{{- end }}
+
+{{- if and (.GeneratorGlusterfsRegEnabled) (.GeneratorRegistryCNS) }}
+{{"\n"}}# Configure Registry storage
+openshift_hosted_registry_storage_kind=glusterfs
 {{- end }}
 
 {{- if .GeneratorMetricsEnabled }}
@@ -186,6 +193,27 @@ openshift_logging_storage_volume_size=2Gi
 {{"\n"}}[lb]
 {{- range .GeneratorLbList }}
 {{ . }}
+{{- end }}
+{{- end }}
+
+{{- if .GeneratorNfsEnabled }}
+{{"\n"}}[nfs]
+{{- range .GeneratorNfsList }}
+{{ . }}
+{{- end }}
+{{- end }}
+
+{{- if .GeneratorGlusterfsEnabled }}
+{{"\n"}}[glusterfs]
+{{- range $key, $value := .GeneratorGlusterfsMap }}
+{{ $key }} {{ $value }}
+{{- end }}
+{{- end }}
+
+{{- if .GeneratorGlusterfsRegEnabled }}
+{{"\n"}}[glusterfs_registry]
+{{- range $key, $value := .GeneratorGlusterfsRegMap }}
+{{ $key }} {{ $value }}
 {{- end }}
 {{- end }}
 

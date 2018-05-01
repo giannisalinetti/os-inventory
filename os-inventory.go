@@ -50,6 +50,11 @@ func doSanityChecks(inv *parameters.Inventory) error {
 		return err
 	}
 
+	err = inv.CheckRegistryStorage()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

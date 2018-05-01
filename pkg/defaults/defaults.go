@@ -6,7 +6,10 @@ func init() {
 	DefaultCfg["generatorDeploymentType"] = "origin"
 	DefaultCfg["generatorSshUser"] = "root"
 	DefaultCfg["generatorNfsEnabled"] = true
+	DefaultCfg["generatorGlusterfsEnabled"] = false
+	DefaultCfg["generatorGlusterfsRegEnabled"] = false
 	DefaultCfg["generatorRegistryNativeNfs"] = true
+	DefaultCfg["generatorRegistryCNS"] = false
 	DefaultCfg["generatorHaproxyEnabled"] = false
 	DefaultCfg["generatorInstallVersion"] = "v3.9"
 	DefaultCfg["generatorSkipChecks"] = false
@@ -32,12 +35,15 @@ func init() {
 	DefaultCfg["generatorMetricsEnabled"] = true
 	DefaultCfg["generatorDeployHosa"] = true
 	DefaultCfg["generatorMetricsNativeNfs"] = true
-	DefaultCfg["generatorPrometheusEnabled"] = true
+	DefaultCfg["generatorPrometheusEnabled"] = false
 	DefaultCfg["generatorPrometheusNativeNfs"] = true
 	DefaultCfg["generatorLoggingEnabled"] = true
 	DefaultCfg["generatorLoggingNativeNfs"] = true
 	DefaultCfg["generatorMastersList"] = make([]string, 0)
 	DefaultCfg["generatorEtcdList"] = make([]string, 0)
 	DefaultCfg["generatorLbList"] = make([]string, 0)
+	DefaultCfg["generatorNfsList"] = make([]string, 0)
+	DefaultCfg["generatorGlusterfsMap"] = make(map[string]string)
+	DefaultCfg["generatorGlusterfsRegMap"] = make(map[string]string)
 	DefaultCfg["generatorNodesMap"] = make(map[string]string)
 }
