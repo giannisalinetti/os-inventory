@@ -98,6 +98,11 @@ openshift_hosted_registry_storage_volume_name=registry
 openshift_hosted_registry_storage_volume_size=20Gi
 {{- end }}
 
+{{- if and (.GeneratorGlusterfsRegEnabled) (.GeneratorRegistryCNS) }}
+{{"\n"}}# Configure Registry storage
+openshift_hosted_registry_storage_kind=glusterfs
+{{- end }}
+
 {{- if .GeneratorMetricsEnabled }}
 {{"\n"}}# Configure Cluster Metrics
 openshift_metrics_install_metrics=true

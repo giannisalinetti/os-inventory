@@ -9,6 +9,7 @@ func init() {
 	DefaultCfg["generatorGlusterfsEnabled"] = false
 	DefaultCfg["generatorGlusterfsRegEnabled"] = false
 	DefaultCfg["generatorRegistryNativeNfs"] = true
+	DefaultCfg["generatorRegistryCNS"] = false
 	DefaultCfg["generatorHaproxyEnabled"] = false
 	DefaultCfg["generatorInstallVersion"] = "v3.9"
 	DefaultCfg["generatorSkipChecks"] = false
@@ -34,7 +35,7 @@ func init() {
 	DefaultCfg["generatorMetricsEnabled"] = true
 	DefaultCfg["generatorDeployHosa"] = true
 	DefaultCfg["generatorMetricsNativeNfs"] = true
-	DefaultCfg["generatorPrometheusEnabled"] = true
+	DefaultCfg["generatorPrometheusEnabled"] = false
 	DefaultCfg["generatorPrometheusNativeNfs"] = true
 	DefaultCfg["generatorLoggingEnabled"] = true
 	DefaultCfg["generatorLoggingNativeNfs"] = true

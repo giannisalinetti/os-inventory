@@ -13,6 +13,7 @@ type Inventory struct {
 	GeneratorGlusterfsEnabled      bool              `yaml:"glusterfs_enabled"`
 	GeneratorGlusterfsRegEnabled   bool              `yaml:"glusterfs_registry_enabled"`
 	GeneratorRegistryNativeNfs     bool              `yaml:"registry_native_nfs"`
+	GeneratorRegistryCNS           bool              `yaml:"registry_cns"`
 	GeneratorHaproxyEnabled        bool              `yaml:"haproxy_enabled"`
 	GeneratorInstallVersion        string            `yaml:"install_version"`
 	GeneratorSkipChecks            bool              `yaml:"skip_checks"`
@@ -60,6 +61,7 @@ func New(defaultValues map[string]interface{}) *Inventory {
 		GeneratorGlusterfsEnabled:      defaultValues["generatorGlusterfsEnabled"].(bool),
 		GeneratorGlusterfsRegEnabled:   defaultValues["generatorGlusterfsRegEnabled"].(bool),
 		GeneratorRegistryNativeNfs:     defaultValues["generatorRegistryNativeNfs"].(bool),
+		GeneratorRegistryCNS:           defaultValues["generatorRegistryCNS"].(bool),
 		GeneratorHaproxyEnabled:        defaultValues["generatorHaproxyEnabled"].(bool),
 		GeneratorInstallVersion:        defaultValues["generatorInstallVersion"].(string),
 		GeneratorSkipChecks:            defaultValues["generatorSkipChecks"].(bool),
