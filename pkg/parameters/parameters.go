@@ -141,7 +141,7 @@ func (i *Inventory) CheckInfraIpv4() error {
 	return nil
 }
 
-// Check if SND plugin is among the supported ones
+// Check if SDN plugin is among the supported ones
 func (i *Inventory) CheckSdnPlugin() error {
 	plugins := []string{"ovs-subnet", "ovs-multitenant", "ovs-networkpolicy"}
 	for _, v := range plugins {
@@ -150,4 +150,12 @@ func (i *Inventory) CheckSdnPlugin() error {
 		}
 	}
 	return errors.New("Invalid SND plugin.")
+}
+
+// Check if Registry is using NFS or CNS storage
+func (i *Inventory) CheckRegistryStorage() error {
+	if i.GeneratorRegistryNativeNfs == true && i.GeneratorRegistryCNS == true {
+		return errors.New("Can't use both NFS and CNS for registry storage.")
+	}
+	return nil
 }

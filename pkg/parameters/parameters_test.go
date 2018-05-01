@@ -64,7 +64,7 @@ func TestCheckInfraIpv4(t *testing.T) {
 					return
 				}
 			}
-			t.Error("CheckInfraIpv4 tesing error.")
+			t.Error("CheckInfraIpv4 testing error.")
 		}
 	}
 }
@@ -85,6 +85,29 @@ func TestCheckSdnPlugin(t *testing.T) {
 				}
 			}
 			t.Error("CheckSdnPlugin testing error.")
+		}
+	}
+}
+
+func TestCheckRegistryStorage(t *testing.T) {
+	i := New(defaults.DefaultCfg)
+
+	// Test wrong combination
+	i.GeneratorRegistryNativeNfs = true
+	i.GeneratorRegistryCNS = true
+	err := i.CheckRegistryStorage()
+	if err == nil {
+		t.Error("CheckRegistryStorage testing error.")
+	}
+
+	// Test good combinations
+	okCombinations := [][]bool{{true, false}, {false, true}, {false, false}}
+	for c, _ := range okCombinations {
+		i.GeneratorRegistryNativeNfs = okCombinations[c][0]
+		i.GeneratorRegistryCNS = okCombinations[c][1]
+		err := i.CheckRegistryStorage()
+		if err != nil {
+			t.Error("CheckRegistryStorage testing error.")
 		}
 	}
 }
