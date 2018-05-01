@@ -12,6 +12,8 @@ etcd_list:
     - m3.example.com
 lb_list:
     - lb.example.com
+nfs_list:
+    - m1.example.com
 nodes_map:
     m1.example.com: ""
     m2.example.com: ""
