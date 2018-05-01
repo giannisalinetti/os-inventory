@@ -6,6 +6,8 @@ func init() {
 	DefaultCfg["generatorDeploymentType"] = "origin"
 	DefaultCfg["generatorSshUser"] = "root"
 	DefaultCfg["generatorNfsEnabled"] = true
+	DefaultCfg["generatorGlusterfsEnabled"] = false
+	DefaultCfg["generatorGlusterfsRegEnabled"] = false
 	DefaultCfg["generatorRegistryNativeNfs"] = true
 	DefaultCfg["generatorHaproxyEnabled"] = false
 	DefaultCfg["generatorInstallVersion"] = "v3.9"
@@ -39,5 +41,8 @@ func init() {
 	DefaultCfg["generatorMastersList"] = make([]string, 0)
 	DefaultCfg["generatorEtcdList"] = make([]string, 0)
 	DefaultCfg["generatorLbList"] = make([]string, 0)
+	DefaultCfg["generatorNfsList"] = make([]string, 0)
+	DefaultCfg["generatorGlusterfsMap"] = make(map[string]string)
+	DefaultCfg["generatorGlusterfsRegMap"] = make(map[string]string)
 	DefaultCfg["generatorNodesMap"] = make(map[string]string)
 }

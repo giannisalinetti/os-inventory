@@ -10,6 +10,8 @@ type Inventory struct {
 	GeneratorDeploymentType        string            `yaml:"deployment_type"`
 	GeneratorSshUser               string            `yaml:"ssh_user"`
 	GeneratorNfsEnabled            bool              `yaml:"nfs_enabled"`
+	GeneratorGlusterfsEnabled      bool              `yaml:"glusterfs_enabled"`
+	GeneratorGlusterfsRegEnabled   bool              `yaml:"glusterfs_registry_enabled"`
 	GeneratorRegistryNativeNfs     bool              `yaml:"registry_native_nfs"`
 	GeneratorHaproxyEnabled        bool              `yaml:"haproxy_enabled"`
 	GeneratorInstallVersion        string            `yaml:"install_version"`
@@ -43,6 +45,9 @@ type Inventory struct {
 	GeneratorMastersList           []string          `yaml:"masters_list"`
 	GeneratorEtcdList              []string          `yaml:"etcd_list"`
 	GeneratorLbList                []string          `yaml:"lb_list"`
+	GeneratorNfsList               []string          `yaml:"nfs_list"`
+	GeneratorGlusterfsMap          map[string]string `yaml:"glusterfs_map"`
+	GeneratorGlusterfsRegMap       map[string]string `yaml:"glusterfs_registry_map"`
 	GeneratorNodesMap              map[string]string `yaml:"nodes_map"`
 }
 
@@ -52,6 +57,8 @@ func New(defaultValues map[string]interface{}) *Inventory {
 		GeneratorDeploymentType:        defaultValues["generatorDeploymentType"].(string),
 		GeneratorSshUser:               defaultValues["generatorSshUser"].(string),
 		GeneratorNfsEnabled:            defaultValues["generatorNfsEnabled"].(bool),
+		GeneratorGlusterfsEnabled:      defaultValues["generatorGlusterfsEnabled"].(bool),
+		GeneratorGlusterfsRegEnabled:   defaultValues["generatorGlusterfsRegEnabled"].(bool),
 		GeneratorRegistryNativeNfs:     defaultValues["generatorRegistryNativeNfs"].(bool),
 		GeneratorHaproxyEnabled:        defaultValues["generatorHaproxyEnabled"].(bool),
 		GeneratorInstallVersion:        defaultValues["generatorInstallVersion"].(string),
@@ -85,6 +92,9 @@ func New(defaultValues map[string]interface{}) *Inventory {
 		GeneratorMastersList:           defaultValues["generatorMastersList"].([]string),
 		GeneratorEtcdList:              defaultValues["generatorEtcdList"].([]string),
 		GeneratorLbList:                defaultValues["generatorLbList"].([]string),
+		GeneratorNfsList:               defaultValues["generatorNfsList"].([]string),
+		GeneratorGlusterfsMap:          defaultValues["generatorGlusterfsMap"].(map[string]string),
+		GeneratorGlusterfsRegMap:       defaultValues["generatorGlusterfsRegMap"].(map[string]string),
 		GeneratorNodesMap:              defaultValues["generatorNodesMap"].(map[string]string),
 	}
 	return inv
