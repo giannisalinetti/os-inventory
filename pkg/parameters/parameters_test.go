@@ -40,16 +40,31 @@ func TestCheckInstallVersion(t *testing.T) {
 
 func TestCheckClusterMethod(t *testing.T) {
 	i := New(defaults.DefaultCfg)
-	badTests := []string{"parallel", "NATIVE", "Native", "pcs"}
-	for _, testValue := range badTests {
-		i.GeneratorClusterMethod = testValue
+	checkErr := errors.New("Invalid cluster method.")
+	var tests = []struct {
+		args        string
+		expectedErr error
+	}{
+		{"native", nil},
+		{"parallel", checkErr},
+		{"NATIVE", checkErr},
+		{"", checkErr},
+		{"pcs", checkErr},
+	}
+	for _, test := range tests {
+		i.GeneratorClusterMethod = test.args
 		err := i.CheckClusterMethod()
-		if testValue != "native" && err == nil {
-			t.Error("CheckClusterMethod testing error.")
+		if test.expectedErr != nil {
+			if err.Error() != test.expectedErr.Error() {
+				t.Error("CheckClusterMethod testing error.")
+			}
+		} else {
+			if err != test.expectedErr {
+				t.Error("CheckInfraIpv4 testing error.")
+			}
 		}
 	}
 }
-
 func TestCheckInfraIpv4(t *testing.T) {
 	i := New(defaults.DefaultCfg)
 	checkErr := errors.New("Invalid IPv4 address.")
