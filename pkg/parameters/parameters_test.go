@@ -1,6 +1,7 @@
 package parameters
 
 import (
+	"errors"
 	"github.com/giannisalinetti/os-inventory/pkg/defaults"
 	"testing"
 )
@@ -71,20 +72,30 @@ func TestCheckInfraIpv4(t *testing.T) {
 
 func TestCheckSdnPlugin(t *testing.T) {
 	i := New(defaults.DefaultCfg)
-	validPlugins := []string{"ovs-subnet", "ovs-multitenant", "ovs-networkpolicy"}
-	badTests := []string{"ovs-vxlan", "dummy", "Ovs-MultiTenant", "ovs_networkpolicy"}
-	for _, testValue := range badTests {
-		i.GeneratorSdnPlugin = testValue
+	checkErr := errors.New("Invalid SDN plugin.")
+	var tests = []struct {
+		args        string
+		expectedErr error
+	}{
+		{"ovs-subnet", nil},
+		{"ovs-multitenant", nil},
+		{"ovs-networkpolicy", nil},
+		{"ovs-vxlan", checkErr},
+		{"dummy", checkErr},
+		{"Ovs-MultiTenant", checkErr},
+		{"ovs_networkpolicy", checkErr},
+	}
+	for _, test := range tests {
+		i.GeneratorSdnPlugin = test.args
 		err := i.CheckSdnPlugin()
-		if err == nil {
-			for _, valid := range validPlugins {
-				if valid != testValue {
-					continue
-				} else {
-					return
-				}
+		if test.expectedErr != nil {
+			if err.Error() != test.expectedErr.Error() {
+				t.Error("CheckSdnPlugin testing error.")
 			}
-			t.Error("CheckSdnPlugin testing error.")
+		} else {
+			if err != test.expectedErr {
+				t.Error("CheckSdnPlugin testing error.")
+			}
 		}
 	}
 }
