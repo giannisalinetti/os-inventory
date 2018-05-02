@@ -149,7 +149,7 @@ func (i *Inventory) CheckSdnPlugin() error {
 			return nil
 		}
 	}
-	return errors.New("Invalid SND plugin.")
+	return errors.New("Invalid SDN plugin.")
 }
 
 // Check if Registry is using NFS or CNS storage
