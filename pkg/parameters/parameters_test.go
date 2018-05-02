@@ -20,20 +20,34 @@ func TestCheckDeploymentType(t *testing.T) {
 
 func TestCheckInstallVersion(t *testing.T) {
 	i := New(defaults.DefaultCfg)
-	validVersions := []string{"v3.4", "v3.5", "v3.6", "v3.7", "v3.9", "v3.10", "v3.11"}
-	badTests := []string{"v1.2", "3.9", "v3.0", "v3.6"}
-	for _, testValue := range badTests {
-		i.GeneratorInstallVersion = testValue
+	checkErr := errors.New("Invalid or unsupported version.")
+	var tests = []struct {
+		args        string
+		expectedErr error
+	}{
+		{"v3.4", nil},
+		{"v3.5", nil},
+		{"v3.6", nil},
+		{"v3.7", nil},
+		{"v3.9", nil},
+		{"v3.10", nil},
+		{"v3.11", nil},
+		{"v1.2", checkErr},
+		{"3.9", checkErr},
+		{"v3.0", checkErr},
+		{"", checkErr},
+	}
+	for _, test := range tests {
+		i.GeneratorInstallVersion = test.args
 		err := i.CheckInstallVersion()
-		if err == nil {
-			for _, valid := range validVersions {
-				if valid != testValue {
-					continue
-				} else {
-					return
-				}
+		if test.expectedErr != nil {
+			if err.Error() != test.expectedErr.Error() {
+				t.Error("CheckInstallVersion testing error.")
 			}
-			t.Error("CheckInstallVersion testing error.")
+		} else {
+			if err != test.expectedErr {
+				t.Error("CheckInstallVersion testing error.")
+			}
 		}
 	}
 }
@@ -60,11 +74,12 @@ func TestCheckClusterMethod(t *testing.T) {
 			}
 		} else {
 			if err != test.expectedErr {
-				t.Error("CheckInfraIpv4 testing error.")
+				t.Error("CheckClusterMethod testing error.")
 			}
 		}
 	}
 }
+
 func TestCheckInfraIpv4(t *testing.T) {
 	i := New(defaults.DefaultCfg)
 	checkErr := errors.New("Invalid IPv4 address.")
