@@ -8,12 +8,29 @@ import (
 
 func TestCheckDeploymentType(t *testing.T) {
 	i := New(defaults.DefaultCfg)
-	badTests := []string{"dummy", "Origin", "enter prise", "origin", ""}
-	for _, testValue := range badTests {
-		i.GeneratorDeploymentType = testValue
+	checkErr := errors.New("Invalid deployment type.")
+	var tests = []struct {
+		args        string
+		expectedErr error
+	}{
+		{"origin", nil},
+		{"enterprise", nil},
+		{"", checkErr},
+		{"dummy", checkErr},
+		{"enter prise", checkErr},
+		{"Origin", checkErr},
+	}
+	for _, test := range tests {
+		i.GeneratorDeploymentType = test.args
 		err := i.CheckDeploymentType()
-		if (testValue != "origin" && testValue != "enterprise") && err == nil {
-			t.Error("CheckDeploymentType testing error.")
+		if test.expectedErr != nil {
+			if err.Error() != test.expectedErr.Error() {
+				t.Error("CheckDeploymentType testing error.")
+			}
+		} else {
+			if err != test.expectedErr {
+				t.Error("CheckDeploymentType testing error.")
+			}
 		}
 	}
 }

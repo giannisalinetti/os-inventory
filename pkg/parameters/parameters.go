@@ -107,7 +107,7 @@ func (i *Inventory) CheckDeploymentType() error {
 	if i.GeneratorDeploymentType == "origin" || i.GeneratorDeploymentType == "enterprise" {
 		return nil
 	} else {
-		return errors.New("Invalid deployemnt type.")
+		return errors.New("Invalid deployment type.")
 	}
 }
 
