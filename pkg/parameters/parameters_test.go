@@ -52,20 +52,30 @@ func TestCheckClusterMethod(t *testing.T) {
 
 func TestCheckInfraIpv4(t *testing.T) {
 	i := New(defaults.DefaultCfg)
-	validAddr := []string{"192.168.1.20", "127.0.0.1", "172.25.250.10"}
-	badAddr := []string{"327.0.0.1", "302.200.1", "0.0,12", "a string"}
-	for _, testValue := range badAddr {
-		i.GeneratorInfraIpv4 = testValue
+	checkErr := errors.New("Invalid IPv4 address.")
+	var tests = []struct {
+		args        string
+		expectedErr error
+	}{
+		{"192.168.1.20", nil},
+		{"127.0.0.1", nil},
+		{"172.25.250.10", nil},
+		{"327.0.0.1", checkErr},
+		{"302.200.1", checkErr},
+		{"0.0,12", checkErr},
+		{"a string", checkErr},
+	}
+	for _, test := range tests {
+		i.GeneratorInfraIpv4 = test.args
 		err := i.CheckInfraIpv4()
-		if err == nil {
-			for _, valid := range validAddr {
-				if valid != testValue {
-					continue
-				} else {
-					return
-				}
+		if test.expectedErr != nil {
+			if err.Error() != test.expectedErr.Error() {
+				t.Error("CheckInfraIpv4 testing error.")
 			}
-			t.Error("CheckInfraIpv4 testing error.")
+		} else {
+			if err != test.expectedErr {
+				t.Error("CheckInfraIpv4 testing error.")
+			}
 		}
 	}
 }
