@@ -1,5 +1,12 @@
 # os-inventory: an OpenShift installation inventory generator
 
+## DISCLAIMER: This project is deprecated. 
+Red Hat OpenShift 4 drop the Ansible deployment method and introduces a totally 
+new approach in the installation of OpenShift clusters based on Terraform and a 
+combination of tecniques which leverage on Red Hat CoreOS **Ignition Configs** 
+on boostrap nodes and control plane nodes.
+Ansible roles are now only related to worker nodes based on RHEL.
+
 ## Why?
 
 Red Hat OpenShift Container Platform is installed using Ansible. The community project
